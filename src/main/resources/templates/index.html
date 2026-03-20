@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Головна</title>
-    <link th:href="@{style.css}" rel="stylesheet">
+    <link th:href="@{/style.css}" rel="stylesheet">
 </head>
 <body>
 
 <div class="navbar">
     <div class="brand">Система бронювання</div>
-    <a th:href="@{/}">Головна</a>
+    <a th:href="@{/}" class="active-nav">Головна</a>
     <a th:href="@{/schedule}">Розклад та Бронювання</a>
     <a th:href="@{/rooms}">Список аудиторій</a>
     <a th:href="@{/teachers}">Викладачі</a>
+    <a th:href="@{/rooms/free}">Вільні аудиторії</a>
     <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Увійти</a>
-    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="margin: 0; padding-left: 10px;">
-        <button type="submit">Вийти</button>
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="logout-form">
+        <button type="submit" class="logout-button">Вийти</button>
     </form>
 </div>
 

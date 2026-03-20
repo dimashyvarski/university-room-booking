@@ -41,8 +41,8 @@ body {
     font-size: 20px;
     font-weight: bold;
     margin-right: auto;
+    color: white;
 }
-
 .container {
     max-width: 1200px;
     margin: 30px auto;
@@ -223,4 +223,150 @@ label {
 .hero-btn.outline:hover {
     background-color: white;
     color: var(--primary-color);
+}
+
+.navbar a.active-nav {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.logout-form {
+    margin: 0;
+    padding-left: 10px;
+}
+
+.search-box {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #e9ecef;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    flex: none;
+    max-width: 100%;
+}
+
+.search-form-row {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.search-form-group {
+    margin-bottom: 0;
+}
+
+.search-label {
+    font-weight: bold;
+}
+
+.search-form-row .btn {
+    width: auto;
+    padding: 10px 25px;
+    height: 42px;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
+.btn-success:hover {
+    background-color: #218838;
+}
+.btn-secondary {
+    background-color: #6c757d;
+    text-decoration: none;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.search-empty-state {
+    text-align: center;
+    color: #666;
+    padding: 40px 20px;
+}
+.search-empty-state h3 {
+    margin-top: 0;
+}
+
+.alert-danger {
+    text-align: center;
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 20px;
+    border-radius: 5px;
+}
+.alert-danger h3 {
+    margin: 0;
+}
+.alert-danger p {
+    margin-bottom: 0;
+}
+
+.text-success {
+    color: #28a745;
+}
+.col-num {
+    width: 50px;
+}
+.room-number-highlight {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #007bff;
+}
+
+.empty-table-msg {
+    text-align: center;
+    color: #6c757d;
+}
+.fw-bold {
+    font-weight: bold;
+}
+
+.search-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.search-form-row .btn {
+    width: auto;
+    padding: 0 20px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.btn-secondary {
+    min-width: 100px;
+    line-height: 1;
+}
+
+.logout-button {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    display: inline-block;
+    line-height: normal;
+}
+
+.logout-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
 }

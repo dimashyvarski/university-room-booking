@@ -22,11 +22,12 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/", "/h2-console/**").permitAll()
+                        .requestMatchers("/", "/style.css", "/h2-console/**").permitAll()
 
                         .requestMatchers("/rooms/add", "/teachers/add", "/schedule/delete/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
+
                 .formLogin(form -> form
                         .defaultSuccessUrl("/schedule", true)
                         .permitAll()

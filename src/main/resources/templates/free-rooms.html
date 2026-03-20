@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Пошук вільних аудиторій</title>
+    <link th:href="@{/style.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="brand">Система бронювання</div>
+    <a th:href="@{/}">Головна</a>
+    <a th:href="@{/schedule}">Розклад та Бронювання</a>
+    <a th:href="@{/rooms}">Список аудиторій</a>
+    <a th:href="@{/rooms/free}" class="active-nav">Вільні аудиторії</a>
+    <a th:href="@{/teachers}">Викладачі</a>
+    <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Увійти</a>
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="logout-form">
+        <button type="submit" class="logout-button">Вийти</button>
+    </form>
+</div>
+
+<div class="container">
+    <h2>Пошук вільних аудиторій</h2>
+    <p>Тут ви можете швидко перевірити, які кабінети ще не зайняті на потрібний вам час.</p>
+
+    <div class="form-section search-box">
+        <form th:action="@{/rooms/free}" method="get" class="search-form-row">
+
+            <div class="form-group search-form-group">
+                <label for="searchDate" class="search-label">Оберіть дату:</label>
+                <input type="date" id="searchDate" name="searchDate" class="form-control" th:value="${searchDate}" required>
+            </div>
+
+            <div class="form-group search-form-group">
+                <label for="searchLesson" class="search-label">Номер пари (1-8):</label>
+                <input type="number" id="searchLesson" name="searchLesson" class="form-control" min="1" max="8" th:value="${searchLesson}" required>
+            </div>
+
+            <button type="submit" class="btn btn-success">Знайти вільні</button>
+            <a th:href="@{/rooms/free}" class="btn btn-secondary">Очистити</a>
+        </form>
+    </div>
+
+    <div class="table-section">
+
+        <div th:if="${searchPerformed == null}" class="search-empty-state">
+            <h3>Введіть параметри пошуку 👆</h3>
+            <p>Оберіть дату та номер пари, щоб побачити список доступних кабінетів.</p>
+        </div>
+
+        <div th:if="${searchPerformed != null and #lists.isEmpty(freeRooms)}" class="alert-danger">
+            <h3>Увага!</h3>
+            <p>На обрану дату та пару абсолютно всі аудиторії вже заброньовані.</p>
+        </div>
+
+        <div th:if="${searchPerformed != null and not #lists.isEmpty(freeRooms)}">
+            <h3>Знайдено доступних аудиторій: <span th:text="${#lists.size(freeRooms)}" class="text-success"></span></h3>
+            <table>
+                <thead>
+                <tr>
+                    <th class="col-num">№ п/п</th>
+                    <th>Номер аудиторії</th>
+                    <th>Місткість</th>
+                    <th>Тип приміщення</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="room, stat : ${freeRooms}">
+                    <td th:text="${stat.count}"></td>
+                    <td th:text="${room.number}" class="room-number-highlight"></td>
+                    <td th:text="${room.capacity} + ' місць'"></td>
+                    <td th:text="${room.type}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

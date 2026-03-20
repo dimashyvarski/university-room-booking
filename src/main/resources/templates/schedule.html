@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Розклад та Бронювання</title>
-    <link th:href="@{style.css}" rel="stylesheet">
+    <link th:href="@{/style.css}" rel="stylesheet">
 </head>
 <body>
 
 <div class="navbar">
     <div class="brand">Система бронювання</div>
     <a th:href="@{/}">Головна</a>
-    <a th:href="@{/schedule}">Розклад та Бронювання</a>
+    <a th:href="@{/schedule}" class="active-nav">Розклад та Бронювання</a>
     <a th:href="@{/rooms}">Список аудиторій</a>
+    <a th:href="@{/rooms/free}">Вільні аудиторії</a>
     <a th:href="@{/teachers}">Викладачі</a>
     <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Увійти</a>
-    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="margin: 0; padding-left: 10px;">
-        <button type="submit">Вийти</button>
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="logout-form">
+        <button type="submit" class="logout-button">Вийти</button>
     </form>
 </div>
 
@@ -73,12 +74,12 @@
         <div class="table-section">
             <h3>Поточний розклад</h3>
 
-            <div class="filter-section" style="margin-bottom: 20px; padding: 15px; background-color: #f4f6f9; border-radius: 8px; border: 1px solid #ddd;">
-                <form th:action="@{/schedule}" method="get" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+            <div class="search-box">
+                <form th:action="@{/schedule}" method="get" class="search-form-row">
 
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label for="filterRoomId" style="font-size: 14px;">Аудиторія:</label>
-                        <select id="filterRoomId" name="filterRoomId" class="form-control" style="padding: 5px;">
+                    <div class="search-form-group">
+                        <label for="filterRoomId" class="search-label">Аудиторія:</label>
+                        <select id="filterRoomId" name="filterRoomId" class="form-control">
                             <option value="">Всі</option>
                             <option th:each="room : ${rooms}"
                                     th:value="${room.id}"
@@ -87,27 +88,28 @@
                         </select>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label for="filterDate" style="font-size: 14px;">Дата:</label>
-                        <input type="date" id="filterDate" name="filterDate" class="form-control" style="padding: 5px;" th:value="${filterDate}">
+                    <div class="search-form-group">
+                        <label for="filterDate" class="search-label">Дата:</label>
+                        <input type="date" id="filterDate" name="filterDate" class="form-control" th:value="${filterDate}">
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label for="filterLessonNumber" style="font-size: 14px;">Пара:</label>
-                        <input type="number" id="filterLessonNumber" name="filterLessonNumber" class="form-control" style="padding: 5px; width: 70px;" min="1" max="8" th:value="${filterLessonNumber}">
+                    <div class="search-form-group">
+                        <label for="filterLessonNumber" class="search-label">Пара:</label>
+                        <input type="number" id="filterLessonNumber" name="filterLessonNumber" class="form-control" min="1" max="8" th:value="${filterLessonNumber}">
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label for="filterGroupName" style="font-size: 14px;">Група:</label>
-                        <input type="text" id="filterGroupName" name="filterGroupName" class="form-control" style="padding: 5px; width: 120px;" placeholder="" th:value="${filterGroupName}">
+                    <div class="search-form-group">
+                        <label for="filterGroupName" class="search-label">Група:</label>
+                        <input type="text" id="filterGroupName" name="filterGroupName" class="form-control" th:value="${filterGroupName}">
                     </div>
 
-                    <div style="display: flex; gap: 5px;">
-                        <button type="submit" class="btn" style="padding: 6px 15px; font-size: 14px; background-color: #007bff;">Шукати</button>
-                        <a th:href="@{/schedule}" class="btn" style="padding: 6px 15px; font-size: 14px; background-color: #6c757d; text-decoration: none; color: white;">Скинути</a>
+                    <div class="search-form-group search-actions">
+                        <button type="submit" class="btn btn-success">Шукати</button>
+                        <a th:href="@{/schedule}" class="btn btn-secondary">Скинути</a>
                     </div>
                 </form>
             </div>
+
             <table>
                 <thead>
                 <tr>
@@ -122,12 +124,12 @@
 
                 <tbody>
                 <tr th:if="${#lists.isEmpty(schedules)}">
-                    <td colspan="6" style="text-align: center;">Нічого не знайдено за вашим запитом.</td>
+                    <td colspan="6" class="empty-table-msg">Нічого не знайдено за вашим запитом.</td>
                 </tr>
                 <tr th:each="item : ${schedules}">
                     <td th:text="${item.lessonDate}"></td>
                     <td th:text="${item.lessonNumber}"></td>
-                    <td th:text="${item.roomNumber}"></td>
+                    <td th:text="${item.roomNumber}" class="fw-bold"></td>
                     <td th:text="${item.groupName}"></td>
                     <td th:text="${item.teacherName}"></td>
                     <td sec:authorize="hasRole('ADMIN')">

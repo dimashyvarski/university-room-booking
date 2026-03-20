@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Викладацький склад</title>
-    <link th:href="@{style.css}" rel="stylesheet">
+    <link th:href="@{/style.css}" rel="stylesheet">
 </head>
 <body>
 
@@ -12,10 +12,11 @@
     <a th:href="@{/}">Головна</a>
     <a th:href="@{/schedule}">Розклад та Бронювання</a>
     <a th:href="@{/rooms}">Список аудиторій</a>
-    <a th:href="@{/teachers}">Викладачі</a>
+    <a th:href="@{/rooms/free}">Вільні аудиторії</a>
+    <a th:href="@{/teachers}" class="active-nav">Викладачі</a>
     <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Увійти</a>
-    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="margin: 0; padding-left: 10px;">
-        <button type="submit">Вийти</button>
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="logout-form">
+        <button type="submit" class="logout-button">Вийти</button>
     </form>
 </div>
 
@@ -64,11 +65,11 @@
                 </thead>
                 <tbody>
                 <tr th:if="${#lists.isEmpty(teachers)}">
-                    <td colspan="4" style="text-align: center; color: #6c757d;">Список порожній. Додайте викладача!</td>
+                    <td colspan="4" class="empty-table-msg">Список порожній. Додайте викладача!</td>
                 </tr>
                 <tr th:each="teacher : ${teachers}">
                     <td th:text="${teacher.id}"></td>
-                    <td th:text="${teacher.fullName}" style="font-weight: bold;"></td>
+                    <td th:text="${teacher.fullName}" class="fw-bold"></td>
                     <td th:text="${teacher.department}"></td>
                     <td th:text="${teacher.email}"></td>
                 </tr>
