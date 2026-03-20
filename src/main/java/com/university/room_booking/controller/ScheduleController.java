@@ -1,6 +1,8 @@
 package com.university.room_booking.controller;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.university.room_booking.model.Schedule;
 import com.university.room_booking.repository.RoomRepository;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.time.LocalDate;
 
 @Controller
 public class ScheduleController {
@@ -25,10 +29,24 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedule")
-    public String showSchedule(Model model) {
-        model.addAttribute("schedules", scheduleRepository.findAllScheduleInfo());
+    public String showSchedule(
+            @RequestParam(required = false) Long filterRoomId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate filterDate,
+            @RequestParam(required = false) Integer filterLessonNumber,
+            @RequestParam(required = false) String filterGroupName,
+            Model model) {
+
+        model.addAttribute("schedules", scheduleRepository.findFilteredScheduleInfo(
+                filterRoomId, filterDate, filterLessonNumber, filterGroupName));
+
         model.addAttribute("rooms", roomRepository.findAll());
         model.addAttribute("teachers", teacherRepository.findAll());
+
+        model.addAttribute("filterRoomId", filterRoomId);
+        model.addAttribute("filterDate", filterDate);
+        model.addAttribute("filterLessonNumber", filterLessonNumber);
+        model.addAttribute("filterGroupName", filterGroupName);
+
         return "schedule";
     }
 
@@ -52,6 +70,7 @@ public class ScheduleController {
 
         return "redirect:/schedule";
     }
+
     @PostMapping("/schedule/delete/{id}")
     public String deleteSchedule(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         scheduleRepository.deleteById(id);
