@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Викладацький склад</title>
+    <link th:href="@{style.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="brand">Система бронювання</div>
+    <a th:href="@{/}">Головна</a>
+    <a th:href="@{/schedule}">Розклад та Бронювання</a>
+    <a th:href="@{/rooms}">Список аудиторій</a>
+    <a th:href="@{/teachers}">Викладачі</a>
+    <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Увійти</a>
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="margin: 0; padding-left: 10px;">
+        <button type="submit">Вийти</button>
+    </form>
+</div>
+
+<div class="container">
+    <h2>Управління викладацьким складом</h2>
+
+    <div th:if="${successMessage}" class="alert alert-success">
+        <span th:text="${successMessage}"></span>
+    </div>
+
+    <div class="schedule-layout">
+
+        <div class="form-section" sec:authorize="hasRole('ADMIN')">
+            <h3>Додати викладача</h3>
+            <form th:action="@{/teachers/add}" method="post">
+
+                <div class="form-group">
+                    <label for="fullName">ПІБ викладача:</label>
+                    <input type="text" id="fullName" name="fullName" class="form-control" placeholder="" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Кафедра:</label>
+                    <input type="text" id="department" name="department" class="form-control" placeholder="" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail (Контакт):</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="" required>
+                </div>
+
+                <button type="submit" class="btn">Зберегти</button>
+            </form>
+        </div>
+
+        <div class="table-section">
+            <h3>Список викладачів</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ПІБ</th>
+                    <th>Кафедра</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(teachers)}">
+                    <td colspan="4" style="text-align: center; color: #6c757d;">Список порожній. Додайте викладача!</td>
+                </tr>
+                <tr th:each="teacher : ${teachers}">
+                    <td th:text="${teacher.id}"></td>
+                    <td th:text="${teacher.fullName}" style="font-weight: bold;"></td>
+                    <td th:text="${teacher.department}"></td>
+                    <td th:text="${teacher.email}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

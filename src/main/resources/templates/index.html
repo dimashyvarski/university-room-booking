@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Головна</title>
+    <link th:href="@{style.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="brand">Система бронювання</div>
+    <a th:href="@{/}">Головна</a>
+    <a th:href="@{/schedule}">Розклад та Бронювання</a>
+    <a th:href="@{/rooms}">Список аудиторій</a>
+    <a th:href="@{/teachers}">Викладачі</a>
+    <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Увійти</a>
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="margin: 0; padding-left: 10px;">
+        <button type="submit">Вийти</button>
+    </form>
+</div>
+
+<div class="container">
+    <div class="hero">
+        <h1>Вітаємо у системі бронювання!</h1>
+
+        <div class="hero-buttons">
+            <a th:href="@{/schedule}" class="hero-btn">Перейти до розкладу</a>
+            <a th:href="@{/rooms}" class="hero-btn outline">Переглянути аудиторії</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

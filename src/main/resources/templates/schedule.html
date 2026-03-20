@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Розклад та Бронювання</title>
+    <link th:href="@{style.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="brand">Система бронювання</div>
+    <a th:href="@{/}">Головна</a>
+    <a th:href="@{/schedule}">Розклад та Бронювання</a>
+    <a th:href="@{/rooms}">Список аудиторій</a>
+    <a th:href="@{/teachers}">Викладачі</a>
+    <a th:href="@{/login}" sec:authorize="!isAuthenticated()">Увійти</a>
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="margin: 0; padding-left: 10px;">
+        <button type="submit">Вийти</button>
+    </form>
+</div>
+
+<div class="container">
+    <h2>Управління розкладом аудиторій</h2>
+
+    <div th:if="${errorMessage}" class="alert alert-error">
+        <span th:text="${errorMessage}"></span>
+    </div>
+    <div th:if="${successMessage}" class="alert alert-success">
+        <span th:text="${successMessage}"></span>
+    </div>
+
+    <div class="schedule-layout">
+
+        <div class="form-section">
+            <h3>Нове бронювання</h3>
+            <form th:action="@{/schedule/book}" method="post">
+
+                <div class="form-group">
+                    <label for="roomId">Аудиторія:</label>
+                    <select id="roomId" name="roomId" class="form-control" required>
+                        <option value="">-- Оберіть аудиторію --</option>
+                        <option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.number} + ' (' + ${room.capacity} + ' місць)'"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="teacherId">Викладач:</label>
+                    <select id="teacherId" name="teacherId" class="form-control" required>
+                        <option value="">-- Оберіть викладача --</option>
+                        <option th:each="teacher : ${teachers}" th:value="${teacher.id}" th:text="${teacher.fullName}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="lessonDate">Дата:</label>
+                    <input type="date" id="lessonDate" name="lessonDate" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lessonNumber">Номер пари:</label>
+                    <input type="number" id="lessonNumber" name="lessonNumber" class="form-control" min="1" max="8" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="groupName">Група:</label>
+                    <input type="text" id="groupName" name="groupName" class="form-control" placeholder="" required>
+                </div>
+
+                <button type="submit" class="btn">Забронювати</button>
+            </form>
+        </div>
+
+        <div class="table-section">
+            <h3>Поточний розклад</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Пара</th>
+                    <th>Аудиторія</th>
+                    <th>Група</th>
+                    <th>Викладач</th>
+                    <th sec:authorize="hasRole('ADMIN')">Дія</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:if="${#lists.isEmpty(schedules)}">
+                    <td colspan="5">Розклад поки що порожній.</td>
+                </tr>
+                <tr th:each="item : ${schedules}">
+                    <td th:text="${item.lessonDate}"></td>
+                    <td th:text="${item.lessonNumber}"></td>
+                    <td th:text="${item.roomNumber}"></td>
+                    <td th:text="${item.groupName}"></td>
+                    <td th:text="${item.teacherName}"></td>
+                    <td sec:authorize="hasRole('ADMIN')">
+                        <form th:action="@{/schedule/delete/{id}(id=${item.id})}" method="post"
+                              onsubmit="return confirm('Ви впевнені, що хочете скасувати це бронювання?');">
+                            <button type="submit" class="btn btn-delete">Скасувати</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
